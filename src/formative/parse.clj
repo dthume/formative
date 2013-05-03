@@ -27,23 +27,26 @@
       (catch Exception _
         (->ParseError x)))))
 
+(defn parse-multiple [v parser]
+  (map parser (if (string? v) [v] v)))
+
 (defmethod parse-input :int [spec v]
   (parse-long spec v))
 
 (defmethod parse-input :ints [spec v]
-  (map #(parse-long spec %) v))
+  (parse-multiple v (partial parse-long spec)))
 
 (defmethod parse-input :long [spec v]
   (parse-long spec v))
 
 (defmethod parse-input :longs [spec v]
-  (map #(parse-long spec %) v))
+  (parse-multiple v (partial parse-long spec)))
 
 (defmethod parse-input :boolean [_ v]
   (Boolean/valueOf v))
 
 (defmethod parse-input :booleans [_ v]
-  (map #(Boolean/valueOf %) v))
+  (parse-multiple v #(Boolean/valueOf %)))
 
 (defn- parse-double [spec x]
   (when-not (string/blank? x)
