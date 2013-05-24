@@ -59,13 +59,13 @@
   (parse-double spec v))
 
 (defmethod parse-input :floats [spec v]
-  (map #(parse-double spec %) v))
+  (parse-multiple v (partial parse-double spec)))
 
 (defmethod parse-input :double [spec v]
   (parse-double spec v))
 
 (defmethod parse-input :doubles [spec v]
-  (map #(parse-double spec %) v))
+  (parse-multiple v (partial parse-double spec)))
 
 (defn- parse-bigdec [spec x]
   (when-not (string/blank? x)
@@ -78,7 +78,7 @@
   (parse-bigdec spec v))
 
 (defmethod parse-input :decimals [spec v]
-  (map #(parse-bigdec spec %) v))
+  (parse-multiple v (partial parse-bigdec)))
 
 (defn- parse-bigint [spec x]
   (when-not (string/blank? x)
@@ -91,7 +91,7 @@
   (parse-bigint spec v))
 
 (defmethod parse-input :bigints [spec v]
-  (map #(parse-bigint spec %) v))
+  (parse-multiple v (partial parse-bigint spec)))
 
 (defn- parse-date [spec x]
   (when-not (string/blank? x)
@@ -106,13 +106,13 @@
   (parse-date spec v))
 
 (defmethod parse-input :dates [spec v]
-  (map #(parse-date spec %) v))
+  (parse-multiple v (partial parse-date spec)))
 
 (defmethod parse-input :date-text [spec v]
   (parse-date spec v))
 
 (defmethod parse-input :date-texts [spec v]
-  (map #(parse-date spec %) v))
+  (parse-multiple v (partial parse-date spec)))
 
 (defmethod parse-input :date-select [spec v]
   (when (every? (comp (complement string/blank?) #(get v %))
@@ -145,7 +145,7 @@
   (parse-file spec v))
 
 (defmethod parse-input :files [spec v]
-  (map #(parse-file spec %) v))
+  (parse-multiple v (partial parse-file spec)))
 
 (defmethod parse-input :heading [spec v]
   ::absent)
